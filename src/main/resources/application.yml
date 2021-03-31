@@ -1,0 +1,20 @@
+server:
+  port: 6633
+spring:
+  application:
+    name: sonar-ex
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgresql.crgxxlxz0auv.ap-south-1.rds.amazonaws.com:5432/postgresql
+    username: postgresql
+    password: postgresql
+  jpa:
+    hibernate:
+      ddl-auto: create
+      properties:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show-sql: true
+
+
+
+
