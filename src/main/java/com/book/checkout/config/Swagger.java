@@ -1,4 +1,4 @@
-package com.sesha.config;
+package com.book.checkout.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,10 +1,10 @@
-package com.sesha;
+package com.book.checkout;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class CheckoutApplicationTests {
 
 	@Test
 	void contextLoads() {
