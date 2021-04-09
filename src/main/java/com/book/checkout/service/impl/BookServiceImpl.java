@@ -18,8 +18,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.book.checkout.dto.BookDto;
+import com.book.checkout.dto.PromoCodeDto;
 import com.book.checkout.entity.Book;
+import com.book.checkout.entity.PromoCode;
+import com.book.checkout.exceptions.BookDetailsNotFoundException;
+import com.book.checkout.exceptions.BookNotFoundException;
 import com.book.checkout.repository.BookRepository;
+import com.book.checkout.repository.CheckoutRepository;
 import com.book.checkout.service.BookService;
 
 @Service
@@ -29,6 +34,9 @@ public class BookServiceImpl implements BookService{
 	
 	@Autowired 
 	BookRepository bookRepository;
+	
+	@Autowired
+	CheckoutRepository checkoutRepository;
 
 	@Override
 	@Transactional
@@ -45,12 +53,16 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public List<BookDto> getAllBooks(Long bookId, int pageNumber, int pageSize) {
+	public List<BookDto> getAllBooks(Long bookId, int pageNumber, int pageSize) throws BookDetailsNotFoundException {
 		Page<Book> book;
 		List<BookDto> bookDtoList = new ArrayList<BookDto>();
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		book = bookRepository.findByBookId(bookId,pageable);
+		if(book==null) {
+			throw new BookDetailsNotFoundException("Book Details Not Found");
+		}
 		book.stream().forEach(bookRes -> {
+			logger.info("All Books");
 			BookDto bookDtoRes = new BookDto();
 			BeanUtils.copyProperties(bookRes, bookDtoRes);
 			bookDtoList.add(bookDtoRes);
@@ -60,8 +72,11 @@ public class BookServiceImpl implements BookService{
 	}
 
 	@Override
-	public String removeBook(Long bookId) {
+	public String removeBook(Long bookId) throws BookNotFoundException {
 		Optional<Book> bookRes = bookRepository.findById(bookId);
+		if(!bookRes.isPresent()) {
+			throw new BookNotFoundException("Book Not Found");
+		}
 		Book book = bookRes.get();
 		bookRepository.delete(book);
 		return "Book Succesfully Deleted";
@@ -75,8 +90,30 @@ public class BookServiceImpl implements BookService{
 			bookRepository.save(book);
 			return "Book Succesfully Updated";
 		}
-	}
 
-	
+	@Override
+	public String addPromos(List<PromoCodeDto> promoCodeDto) {
+		List<PromoCode> promoCode =promoCodeDto.stream().map(new Function<PromoCodeDto,PromoCode>(){
+			@Override
+			public PromoCode apply(PromoCodeDto p) {
+				logger.info("promo Added");
+				return new PromoCode(p.getpCode(),p.getDiscount(),p.getBookName());
+			}
+		}).collect(Collectors.toList());
+		checkoutRepository.saveAll(promoCode);
+		return "Promo Codes Added Successfully";
+		
+		
+		
+		 
+	}
+}
+
+/*
+ * promoCodeDto.stream().forEach(promoCodeDtos -> { PromoCode promoCode = new
+ * PromoCode(); BeanUtils.copyProperties(promoCodeDtos,promoCode);
+ * checkoutRepository.save(promoCode); }); return
+ * "Promo codes Added Succesfully";
+ */
 
 

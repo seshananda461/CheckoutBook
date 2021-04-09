@@ -3,6 +3,9 @@ package com.book.checkout.service;
 import java.util.List;
 
 import com.book.checkout.dto.BookDto;
+import com.book.checkout.dto.PromoCodeDto;
+import com.book.checkout.exceptions.BookDetailsNotFoundException;
+import com.book.checkout.exceptions.BookNotFoundException;
 
 public interface BookService {
 	
@@ -20,16 +23,18 @@ public interface BookService {
 	 * @param pageNumber
 	 * @param pageSize
 	 * @return
+	 * @throws BookDetailsNotFoundException 
 	 */
 
-	List<BookDto> getAllBooks(Long bookId, int pageNumber, int pageSize);
+	List<BookDto> getAllBooks(Long bookId, int pageNumber, int pageSize) throws BookDetailsNotFoundException;
 	
 	/**
 	 * 
 	 * @param bookId
 	 * @return
+	 * @throws BookNotFoundException 
 	 */
-	String removeBook(Long bookId);
+	String removeBook(Long bookId) throws BookNotFoundException;
 	
 	/**
 	 * 
@@ -39,6 +44,14 @@ public interface BookService {
 	 */
 
 	String updateBook(BookDto bookDto);
+	
+	/**
+	 * 
+	 * @param promoCodeDto
+	 * @return
+	 */
+
+	String addPromos(List<PromoCodeDto> promoCodeDto);
 	
 	
 

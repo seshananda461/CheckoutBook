@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.book.checkout.dto.BookDto;
+import com.book.checkout.dto.PromoCodeDto;
+import com.book.checkout.exceptions.BookDetailsNotFoundException;
+import com.book.checkout.exceptions.BookNotFoundException;
 import com.book.checkout.service.BookService;
 
 
@@ -48,9 +51,10 @@ public class BookController {
 	 * @param pageNumber
 	 * @param pageSize
 	 * @return
+	 * @throws BookDetailsNotFoundException 
 	 */
 	@GetMapping("getallbooks")
-	public ResponseEntity<List<BookDto>> getAllBooks(@RequestParam Long bookId,@RequestParam int pageNumber, @RequestParam int pageSize){
+	public ResponseEntity<List<BookDto>> getAllBooks(@RequestParam Long bookId,@RequestParam int pageNumber, @RequestParam int pageSize) throws BookDetailsNotFoundException{
 		List<BookDto> dtoRes=bookService.getAllBooks(bookId,pageNumber,pageSize);
 		return new ResponseEntity<List<BookDto>>(dtoRes,HttpStatus.OK);
 		
@@ -60,9 +64,10 @@ public class BookController {
 	 * 
 	 * @param bookId
 	 * @return
+	 * @throws BookNotFoundException 
 	 */
 	@DeleteMapping("/removingbook")
-	public ResponseEntity<String> removeBook(@RequestParam Long bookId){
+	public ResponseEntity<String> removeBook(@RequestParam Long bookId) throws BookNotFoundException{
 		bookService.removeBook(bookId);
 		return new ResponseEntity<String>("Book Successfully Deleted",HttpStatus.ACCEPTED);
 		
@@ -77,6 +82,18 @@ public class BookController {
 	public ResponseEntity<String> updateBook(@RequestBody BookDto bookDto){
 		bookService.updateBook(bookDto);
 		return new ResponseEntity<String>("Book Updated Successfully",HttpStatus.ACCEPTED);
+		
+	}
+	/**
+	 * 
+	 * @param promoCodeDto
+	 * @return
+	 */
+	
+	@PostMapping("/addpromos")
+	public ResponseEntity<String> addPromos(@RequestBody List<PromoCodeDto> promoCodeDto){
+		bookService.addPromos(promoCodeDto);
+		return new ResponseEntity<String>("Promo codes Added",HttpStatus.CREATED);
 		
 	}
 	
