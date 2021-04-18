@@ -26,7 +26,7 @@ public interface BookService {
 	 * @throws BookDetailsNotFoundException 
 	 */
 
-	List<BookDto> getAllBooks(Long bookId, int pageNumber, int pageSize) throws BookDetailsNotFoundException;
+	List<BookDto> getAllBooks( int pageNumber, int pageSize) throws BookDetailsNotFoundException;
 	
 	/**
 	 * 
@@ -44,6 +44,8 @@ public interface BookService {
 	 */
 
 	String updateBook(BookDto bookDto);
+
+	
 	
 	/**
 	 * 
@@ -51,8 +53,18 @@ public interface BookService {
 	 * @return
 	 */
 
-	String addPromos(List<PromoCodeDto> promoCodeDto);
+	String addPromos(List<PromoCodeDto> promoCodeDto); 
 	
+	
+	
+	/**
+	 * 
+	 * @param pageNumber
+	 * @param pageSize
+	 * @return
+	 */
+	List<PromoCodeDto> getAllDetails(int pageNumber, int pageSize);
+
 	
 
 }

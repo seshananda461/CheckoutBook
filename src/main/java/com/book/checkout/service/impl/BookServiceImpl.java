@@ -41,23 +41,30 @@ public class BookServiceImpl implements BookService{
 	@Override
 	@Transactional
 	public String addBooks(List<BookDto> bookDto) {
-		List<Book> book =bookDto.stream().map(new Function<BookDto,Book>(){
-			@Override
-			public Book apply(BookDto b) {
-				logger.info("Book Added");
-				return new Book(b.getBookId(),b.getBookName(),b.getBookDescription(),b.getBookAuthor(),b.getBookType(),b.getBookPrice(),b.getBookISBN());
-			}
-		}).collect(Collectors.toList());
-		bookRepository.saveAll(book);
+		List<Book> bookList=new ArrayList<Book>();
+		bookDto.stream().forEach(dtoList->{
+			Book book = new Book();
+			BeanUtils.copyProperties(dtoList, book);
+			bookList.add(book);
+		});
+		bookRepository.saveAll(bookList);
 		return "Books Added Successfully";
+		
+//		List<Book> book =bookDto.stream().map(new Function<BookDto,Book>(){
+//		@Override
+//		public Book apply(BookDto b) {
+//			logger.info("Book Added");
+//			return new Book(b.getBookId(),b.getBookName(),b.getBookDescription(),b.getBookAuthor(),b.getBookType(),b.getBookPrice(),b.getBookISBN());
+//		}
+//	}).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<BookDto> getAllBooks(Long bookId, int pageNumber, int pageSize) throws BookDetailsNotFoundException {
+	public List<BookDto> getAllBooks( int pageNumber, int pageSize) throws BookDetailsNotFoundException {
 		Page<Book> book;
 		List<BookDto> bookDtoList = new ArrayList<BookDto>();
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
-		book = bookRepository.findByBookId(bookId,pageable);
+		book = bookRepository.findAll(pageable);
 		if(book==null) {
 			throw new BookDetailsNotFoundException("Book Details Not Found");
 		}
@@ -91,29 +98,46 @@ public class BookServiceImpl implements BookService{
 			return "Book Succesfully Updated";
 		}
 
+	
+	  @Override 
+	  public String addPromos(List<PromoCodeDto> promoCodeDto) {
+		  List<PromoCode> promoCodeList = new ArrayList<PromoCode> ();
+		  promoCodeDto.stream().forEach(promoCodeDtos->{
+		  PromoCode promoCode = new PromoCode();
+		  BeanUtils.copyProperties(promoCodeDtos, promoCode);
+		  promoCodeList.add(promoCode);
+		  });
+	     checkoutRepository.saveAll(promoCodeList);
+	 
+	     return "Promo Codes Added Successfully"; 
+	  
+//	  List<PromoCode> promoCode =promoCodeDto.stream().map(new
+//	  Function<PromoCodeDto,PromoCode>(){
+//	  
+//	  @Override 
+//	  public PromoCode apply(PromoCodeDto p) {
+//	  logger.info("promo Added"); 
+//	  return new PromoCode(p.getpCode(),p.getDiscount(),p.getBookName()); 
+//	  }
+//	  }).collect(Collectors.toList()); 
+	  }
+	 
+	
 	@Override
-	public String addPromos(List<PromoCodeDto> promoCodeDto) {
-		List<PromoCode> promoCode =promoCodeDto.stream().map(new Function<PromoCodeDto,PromoCode>(){
-			@Override
-			public PromoCode apply(PromoCodeDto p) {
-				logger.info("promo Added");
-				return new PromoCode(p.getpCode(),p.getDiscount(),p.getBookName());
-			}
-		}).collect(Collectors.toList());
-		checkoutRepository.saveAll(promoCode);
-		return "Promo Codes Added Successfully";
-		
-		
-		
-		 
+	public List<PromoCodeDto> getAllDetails(int pageNumber, int pageSize) {
+		Page<PromoCode> promoCode;
+		List<PromoCodeDto> promoCodeDtoList = new ArrayList<PromoCodeDto>();
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		promoCode = checkoutRepository.findAll(pageable);
+		promoCode.stream().forEach(dtoList->{
+		PromoCodeDto pDto = new PromoCodeDto();
+		BeanUtils.copyProperties(dtoList, pDto);
+		promoCodeDtoList.add(pDto);
+		});
+		return promoCodeDtoList;
 	}
 }
 
-/*
- * promoCodeDto.stream().forEach(promoCodeDtos -> { PromoCode promoCode = new
- * PromoCode(); BeanUtils.copyProperties(promoCodeDtos,promoCode);
- * checkoutRepository.save(promoCode); }); return
- * "Promo codes Added Succesfully";
- */
+
 
 

@@ -15,6 +15,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 		ErrorMessage errorMessage=new ErrorMessage();
 		errorMessage.setErrorCode("Invalid Book ");
 		errorMessage.setErrorMessage(employeeDetailsNotFoundException.getMessage());
+		
 		return new ResponseEntity<ErrorMessage>(errorMessage,HttpStatus.BAD_REQUEST);
 		
 	}
@@ -24,6 +25,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
 		ErrorMessage errorMessage=new ErrorMessage();
 		errorMessage.setErrorCode("Invalid Book Details");
 		errorMessage.setErrorMessage(employeeDetailsNotFoundException.getMessage());
+		
+		return new ResponseEntity<ErrorMessage>(errorMessage,HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	@ExceptionHandler(value=InvalidPromoCodeException.class)
+	public ResponseEntity<ErrorMessage> handleCustomerNotFoundException(InvalidPromoCodeException invalidPromoCodeException){
+		ErrorMessage errorMessage=new ErrorMessage();
+		errorMessage.setErrorCode("Invalid Book Details");
+		errorMessage.setErrorMessage(invalidPromoCodeException.getMessage());
 		
 		return new ResponseEntity<ErrorMessage>(errorMessage,HttpStatus.BAD_REQUEST);
 		

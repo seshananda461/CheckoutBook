@@ -53,9 +53,9 @@ public class BookController {
 	 * @return
 	 * @throws BookDetailsNotFoundException 
 	 */
-	@GetMapping("getallbooks")
-	public ResponseEntity<List<BookDto>> getAllBooks(@RequestParam Long bookId,@RequestParam int pageNumber, @RequestParam int pageSize) throws BookDetailsNotFoundException{
-		List<BookDto> dtoRes=bookService.getAllBooks(bookId,pageNumber,pageSize);
+	@GetMapping("/getallbooks")
+	public ResponseEntity<List<BookDto>> getAllBooks(@RequestParam int pageNumber, @RequestParam int pageSize) throws BookDetailsNotFoundException{
+		List<BookDto> dtoRes=bookService.getAllBooks(pageNumber,pageSize);
 		return new ResponseEntity<List<BookDto>>(dtoRes,HttpStatus.OK);
 		
 	}
@@ -90,11 +90,27 @@ public class BookController {
 	 * @return
 	 */
 	
-	@PostMapping("/addpromos")
-	public ResponseEntity<String> addPromos(@RequestBody List<PromoCodeDto> promoCodeDto){
-		bookService.addPromos(promoCodeDto);
-		return new ResponseEntity<String>("Promo codes Added",HttpStatus.CREATED);
+	
+	  @PostMapping("/addpromos") 
+	  public ResponseEntity<String> addPromos(@RequestBody List<PromoCodeDto> promoCodeDto){
+	  bookService.addPromos(promoCodeDto); 
+	  return new ResponseEntity<String>("Promo codes Added",HttpStatus.CREATED);
+	  
+	  }
+	 
+	
+	
+	/**
+	 * 
+	 * @param pageNumber
+	 * @param pageSize
+	 * @return
+	 */
+	
+	@GetMapping("/getalldetails")
+	public ResponseEntity<List<PromoCodeDto>> getAllDetails(@RequestParam int pageNumber, @RequestParam int pageSize){
+		List<PromoCodeDto> dtoList = bookService.getAllDetails(pageNumber,pageSize);
+		return new ResponseEntity<List<PromoCodeDto>>(dtoList,HttpStatus.OK) ;
 		
 	}
-	
 }

@@ -1,13 +1,23 @@
 package com.book.checkout.dto;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotEmpty;
+
 public class BookDto {
 	
+	@Digits(integer = 6, fraction = 1, message = "Book Id should be less than 6 digits")
 	private Long bookId;
+	@NotEmpty(message = "Book Name Must not be Empty")
     private String bookName;
+	@NotEmpty(message = "Book Description Must not be Empty")
     private String bookDescription;
+	@NotEmpty(message = "Book Author Must not be Empty")
     private String bookAuthor;
+	@NotEmpty(message = "Book Type Must not be Empty")
     private String bookType;
+	@Digits(integer = 6, fraction = 1, message = "Book price should be less than 6 digits")
     private Long bookPrice;
+	@Digits(integer = 6, fraction = 1, message = "Book ISBN should be less than 6 digits")
     private Long bookISBN;
 	public Long getBookId() {
 		return bookId;
